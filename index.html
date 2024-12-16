@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desserts Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="mystylesheet.css">
+</head>
+
+<body>
+
+    <!--Product-section-->
+<section class="product-section">  
+  <h2 style="color: black;">Desserts</h2>
+  <div class="product-grid" id="productGrid">
+      <!-- Product cards will be dynamically inserted here -->
+  </div>
+</section>
+
+<section class="cart-section">
+    <h2>Cart</h2>
+    <div id="cartItems"></div>
+    <div class="cart-total">
+        <strong>Total:</strong> <span id="cartTotal">$0.00</span>
+   </div>
+
+   <div class="confirm-order" id="confirmOrder">   
+    <p> 
+    <button>Confirm Order</button>
+    </p>
+   </div>
+</section>
+
+<script>
+ 
+    // Array of product data from your provided list
+const products = [
+{
+    image: "./assets/images/image-waffle-desktop.jpg",
+    name: "Waffle with Berries",
+    category: "Waffle",
+    price: 6.50
+},
+{
+    image: "./assets/images/image-creme-brulee-desktop.jpg",
+    name: "Vanilla Bean Crème Brûlée",
+    category: "Crème Brûlée",
+    price: 7.00
+},
+{
+    image: "./assets/images/image-macaron-desktop.jpg",
+    name: "Macaron Mix of Five",
+    category: "Macaron",
+    price: 8.00
+},
+{
+    image: "./assets/images/image-tiramisu-desktop.jpg",
+    name: "Classic Tiramisu",
+    category: "Tiramisu",
+    price: 5.50
+},
+{
+    image: "./assets/images/image-baklava-desktop.jpg",
+    name: "Pistachio Baklava",
+    category: "Baklava",
+    price: 4.00
+},
+{
+    image: "./assets/images/image-meringue-desktop.jpg",
+    name: "Lemon Meringue Pie",
+    category: "Pie",
+    price: 5.00
+},
+{
+    image: "./assets/images/image-cake-desktop.jpg",
+    name: "Red Velvet Cake",
+    category: "Cake",
+    price: 4.50
+},
+{
+    image: "./assets/images/image-brownie-desktop.jpg",
+    name: "Salted Caramel Brownie",
+    category: "Brownie",
+    price: 4.50
+},
+{
+    image: "./assets/images/image-panna-cotta-desktop.jpg",
+    name: "Vanilla Panna Cotta",
+    category: "Panna Cotta",
+    price: 6.50
+}
+];
+
+// References to HTML elements
+const productGrid = document.getElementById("productGrid");
+const cartItems = document.getElementById("cartItems");
+const cartTotal = document.getElementById("cartTotal");
+const confirmOrder =document.getElementById("confirmOrder")
+// Initialize cart
+let cart = [];
+
+// Function to update the cart UI
+function updateCart() {
+cartItems.innerHTML = ""; // Clear the cart section
+let total = 0;
+
+if (cart.length === 0) {
+    cartItems.innerHTML = "<p>No items in the cart.</p>";
+} else {
+    cart.forEach((item, index) => {
+        const cartItem = document.createElement("div");
+        cartItem.classList.add("cart-item");
+
+        cartItem.innerHTML = `
+            <div>
+                <h4>${item.name}</h4>
+                <p>$${item.price.toFixed(2)}</p>
+            </div>
+            <button class="remove-from-cart" data-index="${index}">Remove</button>
+        `;
+        cartItems.appendChild(cartItem);
+        total += item.price;
+    });
+}
+
+cartTotal.textContent = `$${total.toFixed(2)}`;
+}
+
+// Function to add a product to the cart
+function addToCart(product) {
+cart.push(product); // Add product to the cart
+updateCart(); // Refresh the cart UI
+}
+
+// Function to remove a product from the cart
+cartItems.addEventListener("click", function (e) {
+if (e.target.classList.contains("remove-from-cart")) {
+    const productIndex = e.target.getAttribute("data-index");
+    cart.splice(productIndex, 1); // Remove the product
+    updateCart(); // Refresh the cart UI
+}
+});
+
+// Render products dynamically
+products.forEach(product => {
+const productCard = document.createElement("div");
+productCard.classList.add("product-card");
+
+productCard.innerHTML = `
+    <img src="${product.image}" alt="${product.name}">
+    <div class="product-info">
+        <h6>${product.category}</h6>
+        <h3>${product.name}</h3>
+        <p>$${product.price.toFixed(2)}</p>
+    </div>
+    <button class="add-to-cart">Add to Cart</button>
+`;
+
+// Add event listener to "Add to Cart" button
+productCard.querySelector(".add-to-cart").addEventListener("click", () => addToCart(product));
+
+productGrid.appendChild(productCard);
+});
+
+
+</script>
+
+
+
+
+
+
+  
+<!-- Modal -->
+<div id="order-modal" class="modal">
+  <div class="modal-content">
+    <p>Order confirmed! Thank you for your purchase.</p>
+    <button id="close-modal">Close</button>
+  </div>
+</div>
+
+
+  <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>. 
+    Coded by <a href="#">Your Name Here</a>.
+  </div>
+</body>
+</html>
